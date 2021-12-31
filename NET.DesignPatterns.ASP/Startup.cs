@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NET.DesignPatterns.ASP.Configuration;
+using NET.DesignPatterns.Tools.Earn;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,15 @@ namespace NET.DesignPatterns.ASP
         {
             services.AddControllersWithViews();
             services.Configure<MyConfig>(Configuration.GetSection("MyConfig"));
+            services.AddTransient((factory) => {
+                return new LocalEarnFactory(Configuration.GetSection("MyConfig").GetValue<decimal>("LocalPercentage"));
+            });
+            services.AddTransient((factory) => {
+                var foreignPercentage = Configuration.GetSection("MyConfig").GetValue<decimal>("ForeignPercentage");
+                var extra = Configuration.GetSection("MyConfig").GetValue<decimal>("Extra");
+                return new ForeignEarnFactory(foreignPercentage, extra);
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

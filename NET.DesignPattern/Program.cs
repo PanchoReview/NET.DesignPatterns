@@ -1,4 +1,5 @@
-﻿using NET.DesignPattern.FactoryPattern;
+﻿using NET.DesignPattern.DependencyInjection;
+using NET.DesignPattern.FactoryPattern;
 using System;
 
 namespace NET.DesignPattern
@@ -15,6 +16,10 @@ namespace NET.DesignPattern
 
             ISale sale2 = internetSaleFactory.GetSale();
             sale2.Sell(15);
+
+            var beer = new Beer("Pikantus", "Erdinger");
+            var drinkWithBeer = new DrinkWithBeer(10, 1, beer);
+            drinkWithBeer.Build();
         }
     }
 }
