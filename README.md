@@ -1,0 +1,1 @@
+Scaffold-DbContext "Server=localhost; Database=DesignPatterns; Trusted_Connection=True;" Microsoft.EntityFrameworkCore.SqlServer 
