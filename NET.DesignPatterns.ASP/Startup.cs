@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NET.DesignPatterns.ASP.Configuration;
+using NET.DesignPatterns.Model;
+using NET.DesignPatterns.Repository;
 using NET.DesignPatterns.Tools.Earn;
 using System;
 using System.Collections.Generic;
@@ -30,12 +33,19 @@ namespace NET.DesignPatterns.ASP
             services.AddTransient((factory) => {
                 return new LocalEarnFactory(Configuration.GetSection("MyConfig").GetValue<decimal>("LocalPercentage"));
             });
+
             services.AddTransient((factory) => {
                 var foreignPercentage = Configuration.GetSection("MyConfig").GetValue<decimal>("ForeignPercentage");
                 var extra = Configuration.GetSection("MyConfig").GetValue<decimal>("Extra");
                 return new ForeignEarnFactory(foreignPercentage, extra);
             });
 
+            services.AddDbContext<DesignPatternsContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("Default"));
+            });
+
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

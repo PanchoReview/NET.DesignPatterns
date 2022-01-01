@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NET.DesignPatterns.Model\NET.DesignPatterns.Model.csproj" />
+    <ProjectReference Include="..\NET.DesignPatterns.Repository\NET.DesignPatterns.Repository.csproj" />
     <ProjectReference Include="..\NET.DesignPatterns.Tools\NET.DesignPatterns.Tools.csproj" />
   </ItemGroup>
 

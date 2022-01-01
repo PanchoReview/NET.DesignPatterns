@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using NET.DesignPatterns.ASP.Configuration;
 using NET.DesignPatterns.ASP.Models;
+using NET.DesignPatterns.Model;
+using NET.DesignPatterns.Repository;
 using NET.DesignPatterns.Tools;
 using System;
 using System.Collections.Generic;
@@ -15,16 +17,20 @@ namespace NET.DesignPatterns.ASP.Controllers
     public class HomeController : Controller
     {
         private readonly IOptions<MyConfig> config;
+        private readonly IRepository<Beer> repository;
 
-        public HomeController(IOptions<MyConfig> config)
+        public HomeController(IOptions<MyConfig> config, IRepository<Beer> repository)
         {
             this.config = config;
+            this.repository = repository;
         }
 
         public IActionResult Index()
         {
             Log.GetInstance(config.Value.PathLog).Save("Entró a Index");
-            return View();
+
+            var lst = repository.Get();
+            return View(lst);
         }
 
         public IActionResult Privacy()
