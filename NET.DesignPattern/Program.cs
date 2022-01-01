@@ -11,15 +11,12 @@ namespace NET.DesignPattern
         {
             using (var context = new DesignPatternsContext())
             {
-                var beerRepository = new BeerRepository(context);
-                var beer = new Beer();
-                beer.Name = "Corona";
-                beer.Style = "Pilsner";
+                var beerRepository = new Repository<Beer>(context);
+                var beer = new Beer() { Name = "Pancho Beer", Style = "Awesome Beer" };
                 beerRepository.Add(beer);
                 beerRepository.Save();
 
-                var list = beerRepository.Get();
-                foreach (var b in list)
+                foreach(var b in beerRepository.Get())
                 {
                     Console.WriteLine(b.Name);
                 }
