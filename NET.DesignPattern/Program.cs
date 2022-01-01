@@ -1,5 +1,6 @@
-﻿using NET.DesignPattern.DependencyInjection;
-using NET.DesignPattern.FactoryPattern;
+﻿using NET.DesignPattern.FactoryPattern;
+using NET.DesignPattern.RepositoryPattern;
+using NET.DesignPatterns.Model;
 using System;
 
 namespace NET.DesignPattern
@@ -8,18 +9,21 @@ namespace NET.DesignPattern
     {
         static void Main(string[] args)
         {
-            SaleFactory storeSaleFactory = new StoreSaleFactory(10);
-            SaleFactory internetSaleFactory = new InternetSaleFactory(3);
+            using (var context = new DesignPatternsContext())
+            {
+                var beerRepository = new BeerRepository(context);
+                var beer = new Beer();
+                beer.Name = "Corona";
+                beer.Style = "Pilsner";
+                beerRepository.Add(beer);
+                beerRepository.Save();
 
-            ISale sale1 = storeSaleFactory.GetSale();
-            sale1.Sell(15);
-
-            ISale sale2 = internetSaleFactory.GetSale();
-            sale2.Sell(15);
-
-            var beer = new Beer("Pikantus", "Erdinger");
-            var drinkWithBeer = new DrinkWithBeer(10, 1, beer);
-            drinkWithBeer.Build();
+                var list = beerRepository.Get();
+                foreach (var b in list)
+                {
+                    Console.WriteLine(b.Name);
+                }
+            }
         }
     }
 }
